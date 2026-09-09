@@ -1,0 +1,7 @@
+/* The original roulette atlas deliberately magnifies sprite sheets. Food cards
+   now use individual image files, so preserve each image as one complete tile. */
+.case-app.spin .spin-item .food-art,
+.case-app.result .result-food .food-art {
+  background-size: cover !important;
+  background-position: center !important;
+}
