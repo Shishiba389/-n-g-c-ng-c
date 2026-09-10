@@ -29,8 +29,8 @@ const chests:Chest[] = [
 function Art({food}:{food:Food}) {
   const generatedArt=food.customId?.match(/^chest-(\d+):(\d+)$/);
   if(generatedArt){
-    const riceImage=generatedArt[1]==='1'?`${basePath}/food/chest-1/${generatedArt[2]}.webp`:null;
-    return <div className={`food-art ${riceImage?'food-photo':'food-placeholder'}`} aria-hidden="true" style={riceImage?{backgroundImage:`url(${riceImage})`}:undefined}/>;
+    const customImage=['1','2'].includes(generatedArt[1])?`${basePath}/food/chest-${generatedArt[1]}/${generatedArt[2]}.webp`:null;
+    return <div className={`food-art ${customImage?'food-photo':'food-placeholder'}`} aria-hidden="true" style={customImage?{backgroundImage:`url(${customImage})`}:undefined}/>;
   }
   const n=food.image%132, common=n>=120, lunch=n>=72&&!common, expanded=n>=36&&!lunch;
   const index=common?(n-120)%12:lunch?(n-72)%12:expanded?(n-36)%12:n%4;
