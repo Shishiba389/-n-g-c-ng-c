@@ -3,7 +3,7 @@
 @import './food-images.css';
 @import "tailwindcss";
 
-.wordmark{width:164px;height:44px;background:url('/brand/logo-cs-v2.webp') left center/contain no-repeat!important;font-size:0!important}
+.wordmark{width:164px;height:44px;background:url('/brand/an-gi-cung-duoc-logo.png') left center/contain no-repeat!important;font-size:0!important}
 .language-button,.header-counter{min-height:38px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--text);padding:7px 11px;font-size:12px;font-weight:700;line-height:22px}.language-button{cursor:pointer}.language-button:hover{background:var(--surface-raised);border-color:#4b4f58}.language-button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.header-counter{min-width:38px;padding-inline:9px;text-align:center;font-variant-numeric:tabular-nums}.grabfood-button{background:#00b14f!important;color:#fff!important;text-decoration:none}
 @media(max-width:700px){.wordmark{width:40px;background-image:url('/brand/icon-cs-v2.webp')!important}}
 
