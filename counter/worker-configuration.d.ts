@@ -4,7 +4,7 @@ interface __BaseEnv_Env {
 	DB: D1Database;
 	SPIN_RATE_LIMITER: RateLimit;
 	ACCOUNT_RATE_LIMITER: RateLimit;
-	ALLOWED_ORIGIN: "https://nagisanzenin.github.io";
+	ALLOWED_ORIGIN: "https://shishiba389.github.io";
 	GOOGLE_CLIENT_ID: "695244761055-bqfhbgjv4o5nephk5urbu33f8j1gr4a1.apps.googleusercontent.com";
 	ADMIN_GOOGLE_EMAIL: string;
 }

@@ -10,7 +10,7 @@ Custom dishes: up to 50; name 1–60 characters; whole-thousand VND price 10–5
 
 Selection uses the same price-weight model on the currently eligible personal pool. If requested mean lies outside that pool's minimum/maximum prices, use the closest feasible mean and display it. No eligible vegetarian dishes disables spinning. Gold remains determined by price. Reel card slots and transforms never rebase after pool changes.
 
-Admin URL: `https://nagisanzenin.github.io/truanayangi/#admin` (hash route works with static Pages). Every admin API request checks the verified Google identity. The initial owner is matched against the `ADMIN_GOOGLE_EMAIL` Worker secret; it must be an exact verified @gmail.com address. Account data is keyed by Google subject, not email.
+Admin URL: `https://shishiba389.github.io/-n-g-c-ng-c/#admin` (hash route works with static Pages). Every admin API request checks the verified Google identity. The initial owner is matched against the `ADMIN_GOOGLE_EMAIL` Worker secret; it must be an exact verified @gmail.com address. Account data is keyed by Google subject, not email.
 
 `GET /admin/summary` returns estimated spins, saved profile count, custom dish count, profiles updated within 24h and D1 query latency. It is fetched on entry and manual refresh only, with no polling and no extra per-spin writes. Saved profile count is explicitly not total sign-ins. Infrastructure traffic, errors, CPU and billing remain in the Cloudflare dashboard; these are not duplicated in D1.
 
