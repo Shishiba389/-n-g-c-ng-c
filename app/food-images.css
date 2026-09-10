@@ -5,3 +5,8 @@
   background-size: cover !important;
   background-position: center !important;
 }
+
+.food-art.food-photo {
+  background-size: cover;
+  background-position: center;
+}
