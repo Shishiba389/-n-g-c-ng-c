@@ -22,7 +22,6 @@ const chests:Chest[] = [
   {id:1,name:'Hòm Cơm Việt',kicker:'CƠM • XÔI • CƠM PHẦN',description:'50 món cơm Việt — no bụng, đúng gu.',accent:'#f4bd43',ids:[0,9,16,17,36,39,44,45,46,47,56,57,59,64,65,66,90,91,92,93,100,104,117,125,126]},
   {id:2,name:'Hòm Món Nước',kicker:'PHỞ • BÚN • MÌ',description:'50 món nước nóng hổi từ khắp Việt Nam.',accent:'#a78bfa',ids:[1,3,10,11,12,13,19,20,21,23,25,30,31,42,48,50,58,70,71,72,74,75,76,77,79,80,81,82,83,87,88,89,94,95,96,101,102,121,127,128,131]},
   {id:3,name:'Hòm Món Vặt',kicker:'ỐC • XIÊN QUE • ĂN VẶT',description:'50 món vặt phổ biến tại những con hẻm Sài Gòn.',accent:'#e7aa47',ids:[2,34,84,106,107,108,109,110,111,122,124]},
-  {id:4,name:'Hòm Tráng Miệng',kicker:'CHÈ • BÁNH • KEM',description:'50 món ngọt cho phần thưởng sau cùng.',accent:'#e88ab5',ids:[5,27,53,55,69,105,114,118,130]},
   {id:5,name:'Hòm Món Chay',kicker:'THANH ĐẠM • THỰC VẬT',description:'50 món chay đầy màu sắc và năng lượng.',accent:'#83b99d',ids:[7,32,33,35,61,78,119]},
   {id:6,name:'Hòm Đồ Uống',kicker:'SÀI GÒN • CÀ PHÊ • TRÀ SỮA',description:'50 món nước được giới trẻ TP.HCM yêu thích.',accent:'#70bed1',ids:[4,6,8,24,26,28,29,49,51,52,54,60,62,63,67,68,73,85,86,97,98,99,103,112,113,115,116,120,123,129]}
 ];
