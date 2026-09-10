@@ -3,15 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { mergeCounter, parseCounter, COUNTER_TTL } from '../lib/global-counter';
 
 const apiUrl = process.env.NEXT_PUBLIC_COUNTER_API_URL || '';
-const sampleWeight = 8;
-// Retire v2: its extrapolated display was not a server-confirmed total.
-const storageKey = 'truanayangi-counter-confirmed-v3';
-
-function sampled(oneIn: number) {
-  const value = new Uint32Array(1);
-  crypto.getRandomValues(value);
-  return value[0] < Math.floor(0x1_0000_0000 / oneIn);
-}
+const storageKey = 'an-gi-cung-duoc-counter-v1';
 
 export function useGlobalSpinCount() {
   const [count, setCount] = useState<number | null>(null);
@@ -67,12 +59,12 @@ export function useGlobalSpinCount() {
     };
   }, [accept]);
 
-  const recordSpin = useCallback(async (id: string) => {
-    if (!apiUrl || !sampled(sampleWeight)) return;
+  const recordSpin = useCallback(async () => {
+    if (!apiUrl) return;
     try {
       const response = await fetch(apiUrl, {
         method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-        body: JSON.stringify({ id, weight: sampleWeight }), keepalive: true, signal: AbortSignal.timeout(4000),
+        body: JSON.stringify({ id: crypto.randomUUID() }), keepalive: true, signal: AbortSignal.timeout(4000),
       });
       if (response.ok) accept(await response.json());
     } catch { /* A counter outage must not interrupt opening a case. */ }

@@ -1,6 +1,6 @@
 {
   "$schema": "../node_modules/wrangler/config-schema.json",
-  "name": "truanayangi-counter",
+  "name": "an-gi-cung-duoc-counter",
   "main": "worker.ts",
   "compatibility_date": "2026-09-08",
   "compatibility_flags": [
@@ -10,32 +10,13 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "truanayangi-counter",
+      "database_name": "an-gi-cung-duoc-counter",
       "migrations_dir": "migrations",
-      "database_id": "8965f415-cff2-4398-9e63-70fcc7bb7faf"
-    }
-  ],
-  "ratelimits": [
-    {
-      "name": "SPIN_RATE_LIMITER",
-      "namespace_id": "1909202601",
-      "simple": {
-        "limit": 120,
-        "period": 60
-      }
-    },
-    {
-      "name": "ACCOUNT_RATE_LIMITER",
-      "namespace_id": "1909202602",
-      "simple": {
-        "limit": 60,
-        "period": 60
-      }
+      "database_id": "0a232e5c-1082-4cbe-ad9a-063387678b30"
     }
   ],
   "vars": {
-    "ALLOWED_ORIGIN": "https://shishiba389.github.io",
-    "GOOGLE_CLIENT_ID": "695244761055-bqfhbgjv4o5nephk5urbu33f8j1gr4a1.apps.googleusercontent.com"
+    "ALLOWED_ORIGIN": "https://shishiba389.github.io"
   },
   "observability": {
     "enabled": true,

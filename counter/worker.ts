@@ -1,15 +1,14 @@
-import { accounts } from './accounts';
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export default {
   async fetch(request, env, ctx) {
-    if (new URL(request.url).pathname !== '/spins') return accounts(request, env);
+    const url = new URL(request.url);
     const origin = request.headers.get('Origin');
     const headers = new Headers({ 'Cache-Control': 'no-store', Vary: 'Origin' });
     // CORS restricts browser use; this is a public gag-site counter, not authentication.
     if (origin === env.ALLOWED_ORIGIN) headers.set('Access-Control-Allow-Origin', origin);
     const json = (body: unknown, status = 200) => Response.json(body, { status, headers });
-    if (new URL(request.url).pathname !== '/spins') return json({ error: 'Not found' }, 404);
+    if (url.pathname !== '/spins') return json({ error: 'Not found' }, 404);
     if (origin && origin !== env.ALLOWED_ORIGIN) return json({ error: 'Origin not allowed' }, 403);
     if (request.method === 'OPTIONS') {
       headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -20,7 +19,7 @@ export default {
     try {
       if (request.method === 'GET') {
         const cacheKey = new Request(`${new URL(request.url).origin}/spins?edge-cache=2`);
-        const edgeCache = await caches.open('truanayangi-counter');
+        const edgeCache = await caches.open('an-gi-cung-duoc-counter');
         const cached = await edgeCache.match(cacheKey);
         if (cached) return cached;
         const row = await env.DB.prepare('SELECT spins FROM totals WHERE id = 1').first<{ spins: number }>();
@@ -34,12 +33,6 @@ export default {
         return response;
       }
       if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
-      const rateKey = request.headers.get('CF-Connecting-IP') || 'unknown';
-      const { success } = await env.SPIN_RATE_LIMITER.limit({ key: rateKey });
-      if (!success) {
-        headers.set('Retry-After', '60');
-        return json({ error: 'Too many spins' }, 429);
-      }
       const contentType = request.headers.get('Content-Type')?.split(';')[0];
       if (contentType !== 'application/json' && contentType !== 'text/plain') return json({ error: 'Expected JSON' }, 415);
       // Bound the actual stream, rather than trusting a Content-Length header.

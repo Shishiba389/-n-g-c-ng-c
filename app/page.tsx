@@ -6,6 +6,7 @@ import { CaseAudio } from '@/lib/case-audio';
 import { createSpinProfile, spinProgress, stopFraction } from '@/lib/case-mechanics';
 import { readBrowserCookie, writeBrowserCookie } from '@/lib/browser-cookie';
 import { useLocalSpinCount } from '@/hooks/use-local-spin-count';
+import { useGlobalSpinCount } from '@/hooks/use-global-spin-count';
 import { ArrowLeft, ArrowUpRight, ChevronRight, LocateFixed, MapPin, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -13,14 +14,14 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 const colors = ['#5876c9', '#9370c8', '#c76fa2', '#c97a52', '#e8b54a'];
 const districts = ['District 1, Ho Chi Minh City', 'District 3, Ho Chi Minh City', 'Binh Thanh District, Ho Chi Minh City', 'Go Vap District, Ho Chi Minh City', 'Thu Duc City, Ho Chi Minh City'];
 const labels = {
-  vi: { language:'English', localPrefix:'Bạn đã mở', localSuffix:'hòm trên trình duyệt này', soundOn:'Tắt âm thanh', soundOff:'Bật âm thanh' },
-  en: { language:'Tiếng Việt', localPrefix:'You have opened', localSuffix:'cases on this browser', soundOn:'Mute sound', soundOff:'Enable sound' },
+  vi: { language:'English', localPrefix:'Tổng lượt đã mở', localSuffix:'hòm', soundOn:'Tắt âm thanh', soundOff:'Bật âm thanh' },
+  en: { language:'Tiếng Việt', localPrefix:'Total opened', localSuffix:'cases', soundOn:'Mute sound', soundOff:'Enable sound' },
 } as const;
 type Chest = { id:number; name:string; kicker:string; description:string; accent:string; ids:number[] };
 const chests:Chest[] = [
   {id:1,name:'Hòm Cơm Việt',kicker:'CƠM • XÔI • CƠM PHẦN',description:'50 món cơm Việt — no bụng, đúng gu.',accent:'#f4bd43',ids:[0,9,16,17,36,39,44,45,46,47,56,57,59,64,65,66,90,91,92,93,100,104,117,125,126]},
   {id:2,name:'Hòm Món Nước',kicker:'PHỞ • BÚN • MÌ',description:'50 món nước nóng hổi từ khắp Việt Nam.',accent:'#a78bfa',ids:[1,3,10,11,12,13,19,20,21,23,25,30,31,42,48,50,58,70,71,72,74,75,76,77,79,80,81,82,83,87,88,89,94,95,96,101,102,121,127,128,131]},
-  {id:3,name:'Hòm Bánh Mì',kicker:'BÁNH MÌ • BÁNH KẸP',description:'50 biến thể bánh mì, từ cổ điển đến hiện đại.',accent:'#e7aa47',ids:[2,34,84,106,107,108,109,110,111,122,124]},
+  {id:3,name:'Hòm Món Vặt',kicker:'ỐC • XIÊN QUE • ĂN VẶT',description:'50 món vặt phổ biến tại những con hẻm Sài Gòn.',accent:'#e7aa47',ids:[2,34,84,106,107,108,109,110,111,122,124]},
   {id:4,name:'Hòm Tráng Miệng',kicker:'CHÈ • BÁNH • KEM',description:'50 món ngọt cho phần thưởng sau cùng.',accent:'#e88ab5',ids:[5,27,53,55,69,105,114,118,130]},
   {id:5,name:'Hòm Món Chay',kicker:'THANH ĐẠM • THỰC VẬT',description:'50 món chay đầy màu sắc và năng lượng.',accent:'#83b99d',ids:[7,32,33,35,61,78,119]},
   {id:6,name:'Hòm Đồ Uống',kicker:'SÀI GÒN • CÀ PHÊ • TRÀ SỮA',description:'50 món nước được giới trẻ TP.HCM yêu thích.',accent:'#70bed1',ids:[4,6,8,24,26,28,29,49,51,52,54,60,62,63,67,68,73,85,86,97,98,99,103,112,113,115,116,120,123,129]}
@@ -53,7 +54,9 @@ export default function Home() {
   const [spinOffset,setSpinOffset]=useState(0);
   const audio=useRef<CaseAudio|null>(null);
   const frame=useRef(0);
-  const {count:localSpins,recordSpin}=useLocalSpinCount();
+  const {count:browserSpins,recordSpin:recordLocalSpin}=useLocalSpinCount();
+  const {count:globalSpins,enabled:globalCounterEnabled,recordSpin:recordGlobalSpin}=useGlobalSpinCount();
+  const localSpins=globalCounterEnabled?globalSpins:browserSpins;
   const t=labels[language];
   const items=useMemo(()=>pool(selected),[selected]);
   useEffect(()=>{const savedLanguage=readBrowserCookie<'vi'|'en'>('language'),savedSound=readBrowserCookie<boolean>('sound');if(savedLanguage==='vi'||savedLanguage==='en')setLanguage(savedLanguage);if(typeof savedSound==='boolean')setSound(savedSound)},[]);
@@ -74,7 +77,7 @@ export default function Home() {
       if(cell!==lastCell){audio.current?.play('csgo_ui_crate_item_scroll');lastCell=cell;}
       if(progress<1){frame.current=requestAnimationFrame(animate);return;}
       if(winner)audio.current?.play((['item_reveal3_rare','item_reveal4_mythical','item_reveal5_legendary','item_reveal6_ancient','item_reveal6_ancient'] as const)[winner.rarity]);
-      recordSpin();setScreen('result');
+      recordLocalSpin();void recordGlobalSpin();setScreen('result');
     };
     frame.current=requestAnimationFrame(animate);return()=>cancelAnimationFrame(frame.current);
   },[screen,spinReel]);
@@ -91,7 +94,7 @@ export default function Home() {
     }
     setWinner(chosen);setSpinReel(reel);audio.current?.unlock();audio.current?.play('csgo_ui_crate_open');setSpinOffset(0);setScreen('spin');
   };
-  const skip=()=>{cancelAnimationFrame(frame.current);if(winner)audio.current?.play((['item_reveal3_rare','item_reveal4_mythical','item_reveal5_legendary','item_reveal6_ancient','item_reveal6_ancient'] as const)[winner.rarity]);recordSpin();setScreen('result')};
+  const skip=()=>{cancelAnimationFrame(frame.current);if(winner)audio.current?.play((['item_reveal3_rare','item_reveal4_mythical','item_reveal5_legendary','item_reveal6_ancient','item_reveal6_ancient'] as const)[winner.rarity]);recordLocalSpin();void recordGlobalSpin();setScreen('result')};
   const map=winner?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${winner.name} near ${location??district}`)}`:'#';
   const grabFood=winner?`https://food.grab.com/vn/vi/restaurants?${new URLSearchParams({search:winner.name,'support-deeplink':'true',searchParameter:winner.name})}`:'#';
   const toggleLanguage=()=>{const next=language==='vi'?'en':'vi';setLanguage(next);try{writeBrowserCookie('language',next)}catch{}};
