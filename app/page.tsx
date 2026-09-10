@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 const colors = ['#5876c9', '#9370c8', '#c76fa2', '#c97a52', '#e8b54a'];
-const districts = ['District 1, Ho Chi Minh City', 'District 3, Ho Chi Minh City', 'Binh Thanh District, Ho Chi Minh City', 'Go Vap District, Ho Chi Minh City', 'Thu Duc City, Ho Chi Minh City'];
+const districts = ['Quận 1, TP. Hồ Chí Minh', 'Quận 3, TP. Hồ Chí Minh', 'Quận 5, TP. Hồ Chí Minh', 'Quận 7, TP. Hồ Chí Minh', 'Quận 10, TP. Hồ Chí Minh', 'Bình Thạnh, TP. Hồ Chí Minh', 'Gò Vấp, TP. Hồ Chí Minh', 'Phú Nhuận, TP. Hồ Chí Minh', 'Tân Bình, TP. Hồ Chí Minh', 'TP. Thủ Đức, TP. Hồ Chí Minh'];
 const labels = {
   vi: { language:'English', localPrefix:'Tổng lượt đã mở', localSuffix:'hòm', soundOn:'Tắt âm thanh', soundOff:'Bật âm thanh' },
   en: { language:'Tiếng Việt', localPrefix:'Total opened', localSuffix:'cases', soundOn:'Mute sound', soundOff:'Enable sound' },
@@ -94,7 +94,7 @@ export default function Home() {
     setWinner(chosen);setSpinReel(reel);audio.current?.unlock();audio.current?.play('csgo_ui_crate_open');setSpinOffset(0);setScreen('spin');
   };
   const skip=()=>{cancelAnimationFrame(frame.current);if(winner)audio.current?.play((['item_reveal3_rare','item_reveal4_mythical','item_reveal5_legendary','item_reveal6_ancient','item_reveal6_ancient'] as const)[winner.rarity]);recordLocalSpin();void recordGlobalSpin();setScreen('result')};
-  const map=winner?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${winner.name} near ${location??district}`)}`:'#';
+  const map=winner?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location?`quán ${winner.name} gần ${location}`:`quán ${winner.name}, ${district}`)}`:'#';
   const grabFood=winner?`https://food.grab.com/vn/vi/restaurants?${new URLSearchParams({search:winner.name,'support-deeplink':'true',searchParameter:winner.name})}`:'#';
   const toggleLanguage=()=>{const next=language==='vi'?'en':'vi';setLanguage(next);try{writeBrowserCookie('language',next)}catch{}};
   const LanguageButton=()=> <button className="language-button" type="button" onClick={toggleLanguage}>{t.language}</button>;
