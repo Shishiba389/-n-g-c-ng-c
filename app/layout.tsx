@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Trưa nay ăn gì? · Vietnamese Lunch Case',
+  title: 'Ăn gì cũng được · Vietnamese Food Case',
   description: 'Mở hòm chọn món ăn trưa — open a CS-style case and let it pick your lunch.',
 };
 
